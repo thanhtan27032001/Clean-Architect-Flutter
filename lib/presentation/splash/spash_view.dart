@@ -41,7 +41,7 @@ class _SplashViewState extends State<SpashView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorManager.primary,
-      body: Center(child: Image(image: AssetImage(ImaageAssets.splashLogo))),
+      body: Center(child: Image(image: AssetImage(ImageAssets.splashLogo))),
     );
   }
 }
