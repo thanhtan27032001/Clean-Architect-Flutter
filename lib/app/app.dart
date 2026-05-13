@@ -1,3 +1,4 @@
+import 'package:clean_architect/presentation/resources/route_manager.dart';
 import 'package:clean_architect/presentation/resources/theme_manager.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +19,10 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      onGenerateRoute: RouteGenerator.getRoute,
+      initialRoute: Routes.splashRoute,
       theme: getAppTheme(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }

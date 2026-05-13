@@ -3,6 +3,7 @@ import 'package:clean_architect/presentation/login/login_view.dart';
 import 'package:clean_architect/presentation/main/main_view.dart';
 import 'package:clean_architect/presentation/onboarding/onboarding_view.dart';
 import 'package:clean_architect/presentation/register/register_view.dart';
+import 'package:clean_architect/presentation/resources/string_manager.dart';
 import 'package:clean_architect/presentation/splash/spash_view.dart';
 import 'package:clean_architect/presentation/store_detail/store_detail_view.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,10 @@ class Routes {
 Route<dynamic> undefinedRoute() {
   return MaterialPageRoute(
     builder: (context) {
-      return Scaffold(appBar: AppBar(title: Text("No route found")));
+      return Scaffold(
+        appBar: AppBar(title: Text(AppStrings.noRouteFound)),
+        body: Center(child: Text(AppStrings.noRouteFound)),
+      );
     },
   );
 }
