@@ -1,5 +1,5 @@
+import 'package:clean_architect/domain/model.dart';
 import 'package:clean_architect/presentation/onboarding/onboarding_bottom_sheet_widget.dart';
-import 'package:clean_architect/presentation/onboarding/onboarding_view.dart';
 import 'package:clean_architect/presentation/resources/color_manager.dart';
 import 'package:clean_architect/presentation/resources/string_manager.dart';
 import 'package:flutter/material.dart';

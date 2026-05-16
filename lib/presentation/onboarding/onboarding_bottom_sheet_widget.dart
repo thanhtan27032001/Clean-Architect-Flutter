@@ -1,7 +1,7 @@
+import 'package:clean_architect/domain/model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import 'package:clean_architect/presentation/onboarding/onboarding_view.dart';
 import 'package:clean_architect/presentation/resources/asset_manager.dart';
 import 'package:clean_architect/presentation/resources/values_manager.dart'
     show AppPadding, AppSize;

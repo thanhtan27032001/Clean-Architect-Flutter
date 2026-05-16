@@ -1,4 +1,4 @@
-import 'package:clean_architect/presentation/onboarding/onboarding_view.dart';
+import 'package:clean_architect/domain/model.dart';
 import 'package:clean_architect/presentation/resources/style_manager.dart';
 import 'package:clean_architect/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';

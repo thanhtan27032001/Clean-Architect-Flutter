@@ -1,9 +1,8 @@
 import 'package:clean_architect/presentation/onboarding/onboarding_bottom_sheet.dart';
 import 'package:clean_architect/presentation/onboarding/onboarding_page_view.dart';
-import 'package:clean_architect/presentation/resources/asset_manager.dart';
+import 'package:clean_architect/presentation/onboarding/onboarding_view_model.dart';
 import 'package:clean_architect/presentation/resources/color_manager.dart';
 import 'package:clean_architect/presentation/resources/route_manager.dart';
-import 'package:clean_architect/presentation/resources/string_manager.dart';
 import 'package:clean_architect/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
 
@@ -15,71 +14,67 @@ class OnboardingView extends StatefulWidget {
 }
 
 class _OnboardingViewState extends State<OnboardingView> {
-  late final List<SliderObject> _listPage = _getSliderData();
-  int _currentIndex = 0;
   late final PageController _pageController;
+  final _viewModel = OnboardingViewModel();
 
-  List<SliderObject> _getSliderData() => [
-    SliderObject(
-      AppStrings.onBoardingTitle1,
-      AppStrings.onBoardingSubTitle1,
-      ImageAssets.onboardingLogo1,
-    ),
-    SliderObject(
-      AppStrings.onBoardingTitle2,
-      AppStrings.onBoardingSubTitle2,
-      ImageAssets.onboardingLogo2,
-    ),
-    SliderObject(
-      AppStrings.onBoardingTitle3,
-      AppStrings.onBoardingSubTitle3,
-      ImageAssets.onboardingLogo3,
-    ),
-    SliderObject(
-      AppStrings.onBoardingTitle4,
-      AppStrings.onBoardingSubTitle4,
-      ImageAssets.onboardingLogo4,
-    ),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(
+      initialPage: OnboardingViewModel.sliderInitialIndex,
+    );
+    _bindData();
+  }
 
-  void _onPageChanged(int page) {
-    setState(() {
-      _currentIndex = page;
-    });
+  @override
+  void dispose() {
+    _viewModel.dispose();
+    super.dispose();
+  }
+
+  void _bindData() {
+    _viewModel.start();
+  }
+
+  void _onPageChanged(int index) {
+    _viewModel.onPageChanged(index);
   }
 
   void _onNextSlide() {
-    int nextIndex = _currentIndex + 1;
-    if (nextIndex > _listPage.length - 1) {
-      nextIndex = 0;
-    }
     _pageController.animateToPage(
-      nextIndex,
+      _viewModel.goNext(),
       duration: const Duration(milliseconds: DurationConstant.d300),
       curve: Curves.easeInOut,
     );
   }
 
   void _onPreviousSlide() {
-    int previousIndex = _currentIndex - 1;
-    if (previousIndex < 0) {
-      previousIndex = _listPage.length - 1;
-    }
     _pageController.animateToPage(
-      previousIndex,
+      _viewModel.goPrevious(),
       duration: const Duration(milliseconds: DurationConstant.d300),
       curve: Curves.easeInOut,
     );
   }
 
   @override
-  void initState() {
-    super.initState();
-    _pageController = PageController(initialPage: _currentIndex);
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+      stream: _viewModel.outputSliderViewObject,
+      builder: (context, snapshot) {
+        if (snapshot.data != null) {
+          return _buildViewContent(snapshot.data!);
+        } else {
+          return _buildLoading();
+        }
+      },
+    );
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildLoading() {
+    return Center(child: CircularProgressIndicator());
+  }
+
+  Widget _buildViewContent(SliderViewObject view) {
     return Scaffold(
       backgroundColor: ColorManager.white,
       // appBar: AppBar(
@@ -94,17 +89,17 @@ class _OnboardingViewState extends State<OnboardingView> {
       body: SafeArea(
         child: PageView.builder(
           controller: _pageController,
-          itemCount: _listPage.length,
+          itemCount: view.numOfSlide,
           itemBuilder: (context, index) {
-            final page = _listPage[index];
+            final page = _viewModel.listPage[index];
             return OnBoardingPageView(page);
           },
           onPageChanged: _onPageChanged,
         ),
       ),
       bottomSheet: OnboardingBottomSheet(
-        list: _listPage,
-        currentIndex: _currentIndex,
+        list: _viewModel.listPage,
+        currentIndex: view.currentIndex,
         onSkip: () {
           Navigator.pushReplacementNamed(context, Routes.loginRoute);
         },
@@ -113,12 +108,4 @@ class _OnboardingViewState extends State<OnboardingView> {
       ),
     );
   }
-}
-
-class SliderObject {
-  String title;
-  String subTitle;
-  String image;
-
-  SliderObject(this.title, this.subTitle, this.image);
 }
